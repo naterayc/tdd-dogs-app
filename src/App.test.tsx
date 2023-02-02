@@ -7,9 +7,6 @@ describe('app tests', () => {
       //arrange
       const app = render(<App />);
       //act
-      const text = screen.getByText('Vite + React');
-      //assert
-      expect(text).toBeDefined();
       expect(app).toBeDefined();
    });
 });

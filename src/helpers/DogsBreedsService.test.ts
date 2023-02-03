@@ -1,10 +1,9 @@
 
 import { getAllBreeds, getImageBreeds } from "./DogsBreedsService";
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import axios from "axios";
 
 vi.mock("axios");
-
 const mockedAxios = vi.mocked(axios, true);
 
 const mockedBreeds = {
@@ -45,11 +44,14 @@ const mockedImages = {
     ]
 }
 
-describe('given the service getAllBreeds', () => {
-    mockedAxios.get.mockResolvedValueOnce({
-         data: mockedBreeds
-     })
+describe('Given the getAllBreeds and getImageBreeds', () => {
+    afterEach(() => { mockedAxios.mockClear() })
+    beforeEach(() => { mockedAxios.mockClear() })
     it('it should return an object with a list of breeds', async () => {
+        //arrange
+        mockedAxios.get.mockResolvedValueOnce({
+            data: mockedBreeds
+        })
         //act
         const result = await getAllBreeds();
         //expect
@@ -60,16 +62,16 @@ describe('given the service getAllBreeds', () => {
             "french"
         ]);
     });
-});
 
-describe('given the service getImageBreeds', () => {
-    mockedAxios.get.mockResolvedValueOnce({
-        data: mockedImages
-    })
     it('it should return an object with a list of breeds', async () => {
+        //arrange 
+        mockedAxios.get.mockResolvedValueOnce({
+            data: mockedImages
+        })
         //act
         const result = await getImageBreeds('bulldog');
         //assert
         expect(result.message).toContain('https://images.dog.ceo/breeds/bulldog-boston/20200710_175933.jpg');
     });
 });
+

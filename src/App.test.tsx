@@ -6,6 +6,7 @@ describe('app tests', () => {
    it('it should renders', () => {
       //arrange
       const app = render(<App />);
+      screen.debug()
       //act
       expect(app).toBeDefined();
    });

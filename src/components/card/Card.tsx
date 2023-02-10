@@ -1,9 +1,9 @@
-export const Card = ({ image }: Card) => (
+export const Card = ({ image }: CardProps) => (
     <div>
         <img src={image} alt="dog" />
     </div>
 );
 
-interface Card {
+interface CardProps {
     image: string
 };

@@ -1,6 +1,6 @@
 import { Card } from "../card/Card";
 
-export const Gallery = ({ dogImages, breedName }: Gallery) => {
+export const Gallery = ({ dogImages, breedName }: GalleryProps) => {
   return (
     <div>
       <h1>{breedName}</h1>
@@ -16,7 +16,7 @@ export const Gallery = ({ dogImages, breedName }: Gallery) => {
   );
 };
 
-interface Gallery {
+interface GalleryProps {
   dogImages?: string[];
   breedName?: string;
 }

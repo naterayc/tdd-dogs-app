@@ -1,12 +1,15 @@
 import "@testing-library/jest-dom";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Select } from "./Select";
+import { SelectBreeds } from "./SelectBreeds";
 
 describe("Given the Select component", () => {
+  const handleChangeSubBreeds = vi.fn();
   it("it should renders", () => {
     //arrange
-    const select = render(<Select />);
+    const select = render(
+      <SelectBreeds handleChangeBreeds={handleChangeSubBreeds} />
+    );
     //act
     const defaut = screen.getByText("Elige una raza");
     screen.debug();
@@ -16,7 +19,7 @@ describe("Given the Select component", () => {
   });
   it("it should renders a list of options of breeds", () => {
     //arrange
-    render(<Select />);
+    render(<SelectBreeds handleChangeBreeds={handleChangeSubBreeds} />);
     //act
     //const breedOption = screen.getByText('Bulldog');
     //assert

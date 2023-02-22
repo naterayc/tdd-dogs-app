@@ -1,5 +1,5 @@
 
-import { getAllBreeds, getImageBreeds } from "./DogsBreedsService";
+import { getAllBreeds, getImageBreeds, getSubBreeds } from "./DogsBreedsService";
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import axios from "axios";
 
@@ -31,6 +31,11 @@ const mockedBreeds = {
     }
 }
 
+const mockedSubBreeds = {
+    status: 'success',
+    message: ['boston', 'english', 'french'],
+}
+
 const mockedError = {
     status: 500,
     statusText: 'Internal server error'
@@ -49,7 +54,7 @@ const mockedImages = {
     ]
 }
 
-describe('Given the getAllBreeds and getImageBreeds', () => {
+describe('Given the getAllBreeds, getSubBreeds and getImageBreeds', () => {
     afterEach(() => { mockedAxios.mockClear() });
     beforeEach(() => { mockedAxios.mockClear() });
     it('it should return an object with a list of breeds', async () => {
@@ -91,5 +96,22 @@ describe('Given the getAllBreeds and getImageBreeds', () => {
         expect(result.status).toBe(500);
         expect(result.statusText).toBe('Internal server error');
     });
+
+    it('it should return a subBreeds, if a breeds', async () => {
+
+        //arrange
+        mockedAxios.get.mockResolvedValueOnce({
+            data: mockedSubBreeds
+        });
+        //act
+        const result = await getSubBreeds('bulldog');
+        console.log('result', result);
+
+        //assert
+        expect(result.message).toContain('boston');
+
+    })
+
+
 });
 

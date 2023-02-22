@@ -6,12 +6,6 @@ import { useState } from "react";
 export const Container = () => {
   const [breeds, setBreeds] = useState<string[]>([]);
 
-  /*   const promesa = async () => {
-    let result = await BreedsArray();
-    setBreeds(result);
-    console.log("prueba", result);
-  }; */
-
   useEffect(() => {
     BreedsArray().then((res) => {
       setBreeds(res);

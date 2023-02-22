@@ -10,6 +10,15 @@ export const getAllBreeds = async () => {
   })).data;
 }
 
+export const getSubBreeds = async (subBbreed: string) => {
+
+  return (await axios.get(`${urlBase}breed/${subBbreed}/list`, {
+    headers: {
+      "content-Type": "application-json"
+    }
+  })).data;
+}
+
 export const getImageBreeds = async (breed: string) => {
   return (await axios.get(`${urlBase}breed/${breed}/images`, {
     headers: {

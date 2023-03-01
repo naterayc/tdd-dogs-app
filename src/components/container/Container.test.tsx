@@ -9,7 +9,7 @@ import { unmountComponentAtNode } from "react-dom";
 vi.mock("axios");
 const mockedAxios = vi.mocked(axios, true);
 
-describe("it should renders", () => {
+describe("it should renders  a Container Components", () => {
   let container: any = null;
   beforeEach(() => {
     // setup a DOM element as a render target
@@ -42,7 +42,7 @@ describe("it should renders", () => {
     expect(defaut).toBeInTheDocument();
   });
 
-  it("it should render a lis of subBreeds when a breed is selected", async () => {
+  it("Should display a list of breeds, and  a list of sub breeds when selecting a race with with sub breeds", async () => {
     //arrange
     mockedAxios.get
       .mockResolvedValueOnce({
@@ -57,18 +57,32 @@ describe("it should renders", () => {
       render(<Container />, container);
     });
 
-    const idOption = screen.getByTestId("selectBreed") as HTMLSelectElement;
-    const breedOption = screen.getByRole("option", { name: "bulldog" }) as HTMLOptionElement;
-    await act(async() => {
-      fireEvent.change(idOption, { target: { value: "bulldog" } });
+    const selectBreed = screen.getByTestId("selectBreed") as HTMLSelectElement;
+    const breedOption = screen.getByRole("option", {
+      name: "bulldog",
+    }) as HTMLOptionElement;
+    await act(async () => {
+      fireEvent.change(selectBreed, { target: { value: "bulldog" } });
     });
-    
-    //console.log("idOption", idOption.value);
+
+    const selectSubBreed = screen.getByTestId(
+      "selectSubBreed"
+    ) as HTMLSelectElement;
+    const subBreedOption = screen.getByRole("option", {
+      name: "boston",
+    }) as HTMLOptionElement;
+    await act(async () => {
+      fireEvent.change(selectSubBreed, { target: { value: "boston" } });
+    });
+
+    console.log("select", selectSubBreed.value);
     screen.debug();
     //assert
     expect(breedOption).toBeInTheDocument();
-    expect(idOption).toBeInTheDocument();
-    expect(idOption.value).toBe('bulldog');
-  
+    expect(selectBreed).toBeInTheDocument();
+    expect(selectBreed.value).toBe("bulldog");
+
+    expect(subBreedOption).toBeInTheDocument();
+    expect(selectSubBreed.value).toBe("boston");
   });
 });

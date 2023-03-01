@@ -7,8 +7,8 @@ export const SelectSubBreeds = ({
 }: SelectSubBreedsProps) => {
   return (
     <>
-      <select name="" id="" onChange={handleChangeSubBreed}>
-        <option value="">subrazas</option>
+      <select data-testid="selectSubBreed" onChange={handleChangeSubBreed}>
+        <option defaultValue={"subrazas"}>subrazas</option>
         {subBreeds && subBreeds.length ? (
           subBreeds.map((subBreed, index) => {
             return <option key={index}>{subBreed}</option>;

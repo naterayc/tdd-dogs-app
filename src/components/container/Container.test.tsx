@@ -26,7 +26,7 @@ describe("it should renders", () => {
     mockedAxios.mockClear();
   });
 
-  it("it should renders", async () => {
+  it("it should renders a list of breeds", async () => {
     //arrange
     mockedAxios.get.mockResolvedValueOnce({
       data: mockedBreeds,
@@ -42,7 +42,7 @@ describe("it should renders", () => {
     expect(defaut).toBeInTheDocument();
   });
 
-  it("it should render a subBreed", async () => {
+  it("it should render a lis of subBreeds when a breed is selected", async () => {
     //arrange
     mockedAxios.get
       .mockResolvedValueOnce({
@@ -53,21 +53,22 @@ describe("it should renders", () => {
       });
 
     //act
-
     await act(async () => {
       render(<Container />, container);
     });
 
-    const idOption = screen.getByTestId("optionBreed") as HTMLSelectElement;
-    const breedOption = screen.getByRole("option", { name: "bulldog" });
-    act(() => {
+    const idOption = screen.getByTestId("selectBreed") as HTMLSelectElement;
+    const breedOption = screen.getByRole("option", { name: "bulldog" }) as HTMLOptionElement;
+    await act(async() => {
       fireEvent.change(idOption, { target: { value: "bulldog" } });
     });
-
-    console.log("idOption", idOption.value);
+    
+    //console.log("idOption", idOption.value);
     screen.debug();
     //assert
     expect(breedOption).toBeInTheDocument();
     expect(idOption).toBeInTheDocument();
+    expect(idOption.value).toBe('bulldog');
+  
   });
 });

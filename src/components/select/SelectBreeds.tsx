@@ -4,7 +4,7 @@ export const SelectBreeds = ({
 }: SelectBreedsProps) => {
   return (
     <div>
-      <select onChange={handleChangeBreeds}>
+      <select data-testid="selectBreed" onChange={handleChangeBreeds}>
         <option data-testid="optionBreed" defaultValue={"Elige una raza"}>
           Elige una raza
         </option>

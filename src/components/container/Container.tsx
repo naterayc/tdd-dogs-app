@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SelectBreeds } from "../select/SelectBreeds";
 import { BreedsArray } from "../../helpers/DogsBreedsTransformer";
-import { useState } from "react";
 import { getSubBreeds } from "../../helpers/DogsBreedsService";
 import { SelectSubBreeds } from "../select/SelectSubBreeds";
 
@@ -16,7 +15,6 @@ export const Container = () => {
     const value = e.target.value;
     getSubBreeds(value).then((res) => {
       console.log("res", res);
-
       setSubBreeds(res.message);
     });
     setSelectedBreed(value);

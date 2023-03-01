@@ -12,8 +12,11 @@ export const Container = () => {
   const [selectedSubBreed, setSelectedSubBreed] = useState("");
 
   const handleChangeBreeds = (e: any) => {
+    console.log("click");
     const value = e.target.value;
     getSubBreeds(value).then((res) => {
+      console.log("res", res);
+
       setSubBreeds(res.message);
     });
     setSelectedBreed(value);

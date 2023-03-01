@@ -5,7 +5,9 @@ export const SelectBreeds = ({
   return (
     <div>
       <select onChange={handleChangeBreeds}>
-        <option defaultValue={"Elige una raza"}>Elige una raza</option>
+        <option data-testid="optionBreed" defaultValue={"Elige una raza"}>
+          Elige una raza
+        </option>
         {breeds && breeds.length ? (
           breeds.map((breed, index) => {
             return <option key={index}>{breed}</option>;

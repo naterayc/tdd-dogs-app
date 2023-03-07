@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { act, render, screen, fireEvent } from "@testing-library/react";
 import { Container } from "./Container";
 import axios from "axios";
-import { mockedBreeds, mockedImages, mockedSubBreeds } from "../../mocks/mocks";
+import { mockedBreeds, mockedImages, mockedSubBreeds, mockedError, mockedImages1, mockedImages2 } from '../../mocks/mocks';
 import { unmountComponentAtNode } from "react-dom";
 
 vi.mock("axios");
@@ -120,9 +120,81 @@ describe("it should renders  a Container Components", () => {
       fireEvent.click(deleteIcon);
     });
 
-    screen.debug();
-
     expect(screen.queryByTestId("container-img")).not.toBeInTheDocument();
 
   })
+  it('it should not render the gallery component when the service fails', async() => {
+    //arrange
+    mockedAxios.get
+      .mockRejectedValueOnce({
+        data: mockedError,
+      })
+    //act
+    await act(async () => {
+      render(<Container />, container);
+    });
+    //assert
+    expect(screen.queryByText("bulldog")).not.toBeInTheDocument();
+  })
+
+  it('it should not render the subBreeds when the service fails', async() => {
+    //arrange
+    mockedAxios.get
+    .mockResolvedValueOnce({
+      data: mockedBreeds,
+    })
+    .mockRejectedValueOnce({
+      data: mockedError,
+    })
+    //act
+    await act(async () => {
+      render(<Container />, container);
+    });
+    const selectBreed = screen.getByTestId("selectBreed") as HTMLSelectElement;
+    await act(async () => {
+      fireEvent.change(selectBreed, { target: { value: "bulldog" } });
+    });
+    //assert
+    
+    expect(screen.getByRole("option", {name: "bulldog"})).toBeInTheDocument();
+    expect(screen.queryByText("french")).not.toBeInTheDocument();
+  })
+
+  it('it should not render the subBreeds when the service fails', async() => {
+    //arrange
+    mockedAxios.get
+    .mockResolvedValueOnce({
+      data: mockedBreeds,
+    })
+    .mockResolvedValueOnce({
+      data: mockedSubBreeds,
+    })
+    .mockResolvedValueOnce({
+      data: mockedImages1,
+    })
+    .mockResolvedValueOnce({
+      data: mockedImages2,
+    });
+    //act
+    await act(async () => {
+      render(<Container />, container);
+    });
+    const selectBreed = screen.getByTestId("selectBreed") as HTMLSelectElement;
+    await act(async () => {
+      fireEvent.change(selectBreed, { target: { value: "bulldog" } });
+    });
+
+    const selectSubBreed = screen.getByTestId(
+      "selectSubBreed"
+    ) as HTMLSelectElement;
+    await act(async () => {
+      fireEvent.change(selectSubBreed, { target: { value: "boston" } });
+    });
+    //assert
+    setTimeout(() => {
+      expect(screen.getByRole("option", {name: "bulldog"})).toBeInTheDocument();
+      expect(screen.getAllByAltText("dog")).toHaveLength(7);
+    }, 2000)
+  })
+
 });

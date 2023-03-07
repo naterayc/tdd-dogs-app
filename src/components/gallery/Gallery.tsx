@@ -1,12 +1,10 @@
 import { Card } from "../card/Card";
 
-export const Gallery = ({ dogImages, breedName }: GalleryProps) => {
+export const Gallery = ({ imageBreeds }: GalleryProps) => {
   return (
     <div>
-      <h1>{breedName}</h1>
-
-      {dogImages && dogImages.length ? (
-        dogImages.map((img, index) => {
+      {imageBreeds && imageBreeds.length ? (
+        imageBreeds.map((img, index) => {
           return <Card key={index} image={img} />;
         })
       ) : (
@@ -17,6 +15,5 @@ export const Gallery = ({ dogImages, breedName }: GalleryProps) => {
 };
 
 interface GalleryProps {
-  dogImages?: string[];
-  breedName?: string;
+  imageBreeds?: string[];
 }

@@ -16,15 +16,13 @@ describe("Given the Gallery component", () => {
 
   it("it should renders a gallery of images, when it receives data", async () => {
     //arrange
-    const gallery = render(
-      <Gallery dogImages={dogImages} breedName={"bulldog"} />
-    );
+    const gallery = render(<Gallery imageBreeds={dogImages} />);
     //act
-    const breedName = screen.getByText("bulldog");
+
     const imagenes = await screen.findAllByAltText("dog");
     //assert
     expect(gallery).toBeDefined();
-    expect(breedName).toBeInTheDocument();
+
     expect(imagenes.length).toBe(7);
   });
 });

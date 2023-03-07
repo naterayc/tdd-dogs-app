@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { act, render, screen, fireEvent } from "@testing-library/react";
 import { Container } from "./Container";
 import axios from "axios";
-import { mockedBreeds, mockedSubBreeds } from "../../mocks/mocks";
+import { mockedBreeds, mockedImages, mockedSubBreeds } from "../../mocks/mocks";
 import { unmountComponentAtNode } from "react-dom";
 
 vi.mock("axios");
@@ -42,7 +42,7 @@ describe("it should renders  a Container Components", () => {
     expect(defaut).toBeInTheDocument();
   });
 
-  it("Should display a list of breeds, and  a list of sub breeds when selecting a race with with sub breeds", async () => {
+  it("Should display a list of breeds, and  a list of sub breeds when selecting a breeds with with sub breeds", async () => {
     //arrange
     mockedAxios.get
       .mockResolvedValueOnce({
@@ -50,6 +50,9 @@ describe("it should renders  a Container Components", () => {
       })
       .mockResolvedValueOnce({
         data: mockedSubBreeds,
+      })
+      .mockResolvedValueOnce({
+        data: mockedImages,
       });
 
     //act

@@ -77,9 +77,7 @@ describe("it should renders  a Container Components", () => {
     await act(async () => {
       fireEvent.change(selectSubBreed, { target: { value: "boston" } });
     });
-
-    console.log("select", selectSubBreed.value);
-    screen.debug();
+  
     //assert
     expect(breedOption).toBeInTheDocument();
     expect(selectBreed).toBeInTheDocument();
@@ -88,4 +86,43 @@ describe("it should renders  a Container Components", () => {
     expect(subBreedOption).toBeInTheDocument();
     expect(selectSubBreed.value).toBe("boston");
   });
+  it('it should remove dogs when the icon x of a breed is clicked', async () => {
+    //arrange
+    mockedAxios.get
+      .mockResolvedValueOnce({
+        data: mockedBreeds,
+      })
+      .mockResolvedValueOnce({
+        data: mockedSubBreeds,
+      })
+      .mockResolvedValueOnce({
+        data: mockedImages,
+      });
+
+    //act
+    await act(async () => {
+      render(<Container />, container);
+    });
+    const selectBreed = screen.getByTestId("selectBreed") as HTMLSelectElement;
+    await act(async () => {
+      fireEvent.change(selectBreed, { target: { value: "bulldog" } });
+    });
+
+    const selectSubBreed = screen.getByTestId(
+      "selectSubBreed"
+    ) as HTMLSelectElement;
+    await act(async () => {
+      fireEvent.change(selectSubBreed, { target: { value: "boston" } });
+    });
+
+    const deleteIcon = screen.getByTestId("delete-icon") as HTMLSpanElement;
+    await act(async () => {
+      fireEvent.click(deleteIcon);
+    });
+
+    screen.debug();
+
+    expect(screen.queryByTestId("container-img")).not.toBeInTheDocument();
+
+  })
 });

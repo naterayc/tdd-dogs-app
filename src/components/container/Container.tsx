@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { SelectBreeds } from "../select/SelectBreeds";
 import { BreedsArray } from "../../helpers/DogsBreedsTransformer";
-import { getSubBreeds } from "../../helpers/DogsBreedsService";
+import { getSubBreeds, getImageBreeds } from "../../helpers/DogsBreedsService";
 import { SelectSubBreeds } from "../select/SelectSubBreeds";
 import { Gallery } from "../gallery/Gallery";
-import { getImageBreeds } from "../../helpers/DogsBreedsService";
 
 export const Container = () => {
   const [breeds, setBreeds] = useState<string[]>([]);
@@ -13,15 +12,25 @@ export const Container = () => {
   const [selectedSubBreed, setSelectedSubBreed] = useState("");
   const [imageBreeds, setImageBreeds] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
   const handleChangeBreeds = (e: any) => {
     const value = e.target.value;
+    setIsLoading(true);
     getSubBreeds(value).then((res) => {
       setSubBreeds(res.message);
+    }).catch(error => {
+      setIsLoading(false);
+      console.error(error)
     });
-
+    
     getImageBreeds(value).then((img) => {
       setImageBreeds(imageBreeds.concat(img.message).reverse());
+      setTimeout(() => { setIsLoading(false) }, 1500);
+    }).catch(error => {
+      setIsLoading(false);
+      console.error(error)
     });
     setSelected([...selected, value]);
     setSelectedBreed(value);
@@ -31,11 +40,16 @@ export const Container = () => {
   const handleChangeSubBreed = (e: any) => {
     const valueSubBreeds = e.target.value;
     setSelectedSubBreed(valueSubBreeds);
+    setIsLoading(true);
     let filter = imageBreeds.filter((img) => {
       return !img.includes(selectedBreed);
     });
     getImageBreeds(`${selectedBreed}/${valueSubBreeds}`).then((img) => {
       setImageBreeds(filter.concat(img.message).reverse());
+      setTimeout(() => { setIsLoading(false) }, 1500);
+    }).catch(error => {
+      setIsLoading(false);
+      console.error(error)
     });
     let filterSelected = selected.filter((breed) => {
       return !breed.includes(selectedBreed);
@@ -44,35 +58,30 @@ export const Container = () => {
   };
 
   const HandleRemove = (dogs: string) => {
+    setIsLoading(false)
     let removeSelected = selected.filter((breed) => {
       return !breed.includes(dogs);
     });
-    /*    let removeImages = imageBreeds.filter((img) => {
-      return !img.includes(
-        dogs
-          .split("-")
-          .map((elem) => elem.trim())
-          .join("/")
-      );
-    }); */
+    let removeImages = imageBreeds.filter((img) => {
+      return !img.includes(dogs.split(' ').join(''));
+    });
     setSelected(removeSelected);
+    setImageBreeds(removeImages);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     BreedsArray().then((res) => {
       setBreeds(res);
+      setTimeout(() => { setIsLoading(false) }, 1500);
+    }).catch(error => {
+      setIsLoading(false);
+      console.error(error)
     });
   }, []);
 
   return (
     <div>
-      {selectedBreed && (
-        <h1>
-          {selectedBreed}
-          {selectedSubBreed && <span> - {selectedSubBreed}</span>}
-        </h1>
-      )}
-
       <SelectBreeds breeds={breeds} handleChangeBreeds={handleChangeBreeds} />
 
       <SelectSubBreeds
@@ -83,21 +92,21 @@ export const Container = () => {
       <div>
         {selected.map((dogs) => {
           return (
-            <p>
+            <p key={dogs}>
               {dogs}
-              <span
+              <span data-testid='delete-icon'
                 onClick={() => {
                   HandleRemove(dogs);
                 }}
               >
-                X
+                {' '}X
               </span>
             </p>
           );
         })}
       </div>
 
-      <Gallery imageBreeds={imageBreeds} />
+      <Gallery imageBreeds={imageBreeds} isLoading={isLoading} />
     </div>
   );
 };

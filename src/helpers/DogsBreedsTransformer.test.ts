@@ -13,7 +13,6 @@ describe('given the BreedsArray function', () => {
         mockedGetAllBreeds.mockResolvedValue(mockedBreeds);
         //act
         const result = await BreedsArray();
-        console.log(result);
         //assert
         expect(result).toBeDefined()
     });

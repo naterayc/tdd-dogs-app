@@ -1,19 +1,25 @@
 import { Card } from "../card/Card";
+import { Spinner } from "../spinner/Spinner";
 
-export const Gallery = ({ imageBreeds }: GalleryProps) => {
+export const Gallery = ({ imageBreeds, isLoading }: GalleryProps) => {
   return (
-    <div>
-      {imageBreeds && imageBreeds.length ? (
-        imageBreeds.map((img, index) => {
-          return <Card key={index} image={img} />;
-        })
-      ) : (
-        <p>¡No hay perritos!</p>
-      )}
-    </div>
+    <>
+      {isLoading ? <Spinner /> :
+        <div>
+          {imageBreeds && imageBreeds.length ? (
+            imageBreeds.map((img, index) => {
+              return <Card data-testid='container-img' key={index} image={img} />;
+            })
+          ) : (
+            <p>Busca tu perrito</p>
+          )}
+        </div>
+      }
+    </>
   );
 };
 
 interface GalleryProps {
   imageBreeds?: string[];
+  isLoading: boolean;
 }

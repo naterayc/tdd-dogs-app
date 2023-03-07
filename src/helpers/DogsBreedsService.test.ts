@@ -57,7 +57,6 @@ describe('Given the getAllBreeds, getSubBreeds and getImageBreeds', () => {
         });
         //act
         const result = await getSubBreeds('bulldog');
-        console.log('result', result);
 
         //assert
         expect(result.message).toContain('boston');
